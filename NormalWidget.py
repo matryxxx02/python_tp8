@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-from MainBubble import Target
+import Mainbubble
 from NormalCursor import NormalCursor
 import csv
 
