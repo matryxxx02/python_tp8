@@ -4,12 +4,12 @@ import math
 # canvas width
 from random import random, randrange
 
-w = 1024
+w = 800
 # canvas height
-h = 800
+h = 1024
 
 # circle radius
-r = 8
+r = 32
 
 # number of tries before stopping trying
 k = 30
@@ -38,13 +38,11 @@ def is_valid(point):
     if samples_background[py][px] != -1:
         return False
 
-    for y in range(py - 1, py + 1):
-        for x in range(px - 1, px + 1):
-            # neighbour outside samples background's grid
-            if y < 0 or y >= row_count or x < 0 or x >= column_count:
-                continue
-            if samples_background[y][x] != -1 and math.dist(samples_background[y][x], point) < r:
-                return False
+    for y in range(py - 2, py + 2):
+        for x in range(px - 2, px + 2):
+           if 0 <= y < row_count and 0 <= x < column_count:
+                if samples_background[y][x] != -1 and math.dist(samples_background[y][x], point) < r:
+                    return False
 
     return True
 
@@ -80,6 +78,6 @@ while active_list:
 with open('test.csv', 'w') as out:
     # csv_out = csv.writer(out, quoting=csv.QUOTE_NONE, delimiter=' ')
     for row in result:
-        out.write(str(int(row[0]))+","+str(int(row[1]))+","+str(r)+"\n")
+        out.write(str(int(row[0]))+","+str(int(row[1]))+","+str(r/2)+"\n")
         # csv_out.writerow(','.join(str(row)))
         # print(row)

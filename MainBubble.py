@@ -55,7 +55,7 @@ class Target():
 			penColor = self.defaultCol
 		painter.setBrush(QBrush(penColor))
 		painter.setPen(QPen(penColor, 1))
-		painter.drawEllipse(QPoint(self.x, self.y), self.size, self.size)
+		painter.drawEllipse(QPoint(self.x, self.y), self.size/2, self.size/2)
 
 
 if __name__ == "__main__":

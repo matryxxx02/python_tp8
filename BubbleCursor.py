@@ -57,4 +57,4 @@ class BubbleCursor(QWidget):
     def distance(self, cursorx, cursory, target):
         x = (target.x - cursorx) ** 2
         y = (target.y - cursory) ** 2
-        return sqrt(x+y) - target.size
+        return sqrt(x+y) - target.size/2

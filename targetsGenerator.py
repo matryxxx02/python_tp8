@@ -1,57 +1,95 @@
-import sys
 import csv
 import math
-import numpy as np
-from random import randrange, random
+import sys
 
-def writeCsv(fileName, points):
-    with open(fileName, 'w') as csvFile:
-        writer = csv.writer(csvFile, quoting=csv.QUOTE_NONE, delimiter='\n')
-        for i in range(len(points)):    
-            writer.writerow(points[i])
+print( sys.argv)
+if (len(sys.argv)<3):
+    print("density and target Size must be provided")
+    exit
 
-def toClose(X, Y, sampleBck, xn, r):
-    for a in range(X - 1, X + 1):
-        for o in range(Y - 1, Y + 1):
-            if (sampleBck[a][o] != -1 and math.dist(sampleBck[a][o], xn) < r ):
-                return True
-    return False
-
-def targetsGenerator(r=10, k=30):
-    # taille du tableau r/sqrt(2)
-    taille = r / math.sqrt(2)
-    dimX = (1024/taille)-1
-    dimY = (800/taille)-1
-    sampleBck = [[-1 for x in range(int(dimX))] for y in range(int(dimY))] 
-    x0 = (randrange(1, len(sampleBck)-1), randrange(1, len(sampleBck[0])-1))
-    activeList = [x0]
-    sampleBck[int(x0[0]/taille)][int(x0[1]/taille)] = x0
+density = int(sys.argv[1])
+targetSize = int(sys.argv[2])
 
 
-    while (len(activeList) > 0):
-        xi = activeList[randrange(0, len(activeList))]
-        for i in range(k):
-            theta = (random() * 2 * math.pi)
-            rang = r+random()*r
-            xn = (xi[0] + math.cos(theta) * rang, xi[1] + math.sin(theta) * rang)
+# canvas width
+from random import random, randrange
 
-            X = int(xn[0]/taille)
-            Y = int(xn[1] / taille)
-            # print(X,Y)
-            if (0 <= X < dimX and 0 <= Y < dimY):
-                if (sampleBck[X][Y] == -1 and toClose(X,Y,sampleBck, xn, r) is False):
-                    sampleBck[X][Y] = xn
-                    activeList.append(xn)
-                    # print("+++ =>",activeList)
-                    break
-            if (i == k - 1):
-                activeList.remove(xi)
-                # print("--- =>",activeList)
-    for i in range(len(sampleBck)):
-        for j in range(len(sampleBck[0])):
-            print(sampleBck[i][j])
-    return sampleBck
-    
-points = targetsGenerator()
-# print(points)
-writeCsv("test.csv", points)
+w = 800
+# canvas height
+h = 1024
+
+# distance minimum
+r = targetSize
+
+# number of tries before stopping trying
+k = 30
+
+cell_size = r / math.sqrt(2)
+
+column_count = w // cell_size
+row_count = h // cell_size
+
+samples_background = [[-1 for x in range(int(w // cell_size))] for y in range(int(h // cell_size))]
+initial_sample = (random() * (h - 1), random() * (w - 1))
+active_list = [initial_sample]
+samples_background[int(initial_sample[0] // cell_size)][int(initial_sample[1] // cell_size)] = initial_sample
+result = []
+
+
+# check that the candidate point is doesn't have too close neighbors
+def is_valid(point):
+    py, px = int(point[0] // cell_size), int(point[1] // cell_size)
+
+    # check if point is within the grid
+    if py < 0 or py >= row_count or px < 0 or px >= column_count:
+        return False
+
+    # check if there is already a point in cell
+    if samples_background[py][px] != -1:
+        return False
+
+    for y in range(py - 2, py + 2):
+        for x in range(px - 2, px + 2):
+           if 0 <= y < row_count and 0 <= x < column_count:
+                if samples_background[y][x] != -1 and math.dist(samples_background[y][x], point) < r:
+                    return False
+
+    return True
+
+
+# Generate a new random candidate from a point
+def generate_random_point(point):
+    theta = random() * math.pi * 2
+    length = r + random() * r
+
+    return (point[0] + math.sin(theta) * length, point[1] + math.cos(theta) * length)
+
+
+while active_list:
+    # random sample from active list
+    sample = active_list[randrange(0, len(active_list))]
+
+    for i in range(k):
+        # generate a new candidate
+        candidate = generate_random_point(sample)
+
+        if is_valid(candidate):
+            active_list.append(candidate)
+            samples_background[int(candidate[0] // cell_size)][int(candidate[1] // cell_size)] = candidate
+            result.append(candidate)
+            break
+
+        # no candidate were valid, remove the sample from the active list
+        if i == k - 1:
+            active_list.remove(sample)
+
+choicePoints = []
+for point in range(density):
+    print(result[randrange(0,len(result))])
+    choicePoints.append(result[randrange(0,len(result))]) 
+
+print(choicePoints)
+
+with open('test.csv', 'w') as out:
+    for row in choicePoints:
+        out.write(str(int(row[0]))+","+str(int(row[1]))+","+str(r//2)+"\n")
