@@ -13,11 +13,9 @@ class ExpSetup(QDialog):
 
     def initUi(self):
 
-        # init widgets
-        self.comboboxMethod()
-
-        # init layouts
+        # init layouts and widgets
         # selection method
+        self.methods = self.combobox(["Highlight", "Bubble", "Rope"])
         hLayoutMethods = QHBoxLayout()
         hLayoutMethods.addWidget(QLabel("methods :"))
         hLayoutMethods.addWidget(self.methods)
@@ -29,15 +27,15 @@ class ExpSetup(QDialog):
         hLayoutUserNb.addWidget(self.userNb)
 
         # density
-        hLayoutUserNb = QHBoxLayout()
-        hLayoutUserNb.addWidget(QLabel("density :"))
-        self.density = self.spinbox("density")
-        hLayoutUserNb.addWidget(self.density)
+        hLayoutDensity = QHBoxLayout()
+        hLayoutDensity.addWidget(QLabel("density :"))
+        self.density = self.combobox(["30", "60", "90"])
+        hLayoutDensity.addWidget(self.density)
 
         # nombre de tailles de cibles
         hLayoutTargetsSize = QHBoxLayout()
         hLayoutTargetsSize.addWidget(QLabel("nombre de tailles de cibles :"))
-        self.targetSize = self.spinbox("targets")
+        self.targetSize = self.combobox(["6", "12", "18"])
         hLayoutTargetsSize.addWidget(self.targetSize)
 
         # repetitions
@@ -52,6 +50,7 @@ class ExpSetup(QDialog):
 
         mainLayout = QVBoxLayout()
         mainLayout.addLayout(hLayoutUserNb)
+        mainLayout.addLayout(hLayoutDensity)
         mainLayout.addLayout(hLayoutMethods)
         mainLayout.addLayout(hLayoutTargetsSize)
         mainLayout.addLayout(hLayoutRepetitions)
@@ -70,13 +69,13 @@ class ExpSetup(QDialog):
         return None
 
     def getValues(self):
-        return self.userNb.value(), self.methods.currentText(), self.density.value(), self.targetSize.value(), self.repetitions.value()
+        return self.userNb.value(), self.methods.currentText(), self.density.currentText(), self.targetSize.currentText(), self.repetitions.value()
 
     # generate selection method combobox
-    def comboboxMethod(self):
-        self.methods = QComboBox()
-        # init combobox values
-        self.methods.addItems(["Highlight", "Bubble", "Rope"])
+    def combobox(self, values):
+        combo = QComboBox()
+        combo.addItems(values)
+        return combo;
         
     # generator of spinbox
     def spinbox(self, value):
@@ -84,10 +83,6 @@ class ExpSetup(QDialog):
         #init spinbox values
         if(value=="userNb"):
             sb.setValue(1)
-        elif(value=="density"):
-            sb.setValue(60)
-        elif(value=="targets"):
-            sb.setValue(12)
         elif(value=="repetitions"):
             sb.setValue(1)
         return sb

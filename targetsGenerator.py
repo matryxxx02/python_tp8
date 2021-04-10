@@ -9,7 +9,6 @@ if (len(sys.argv)<3):
 density = int(sys.argv[1])
 targetSize = int(sys.argv[2])
 
-
 # canvas width
 from random import random, randrange
 
@@ -82,6 +81,7 @@ while active_list:
         if i == k - 1:
             active_list.remove(sample)
 
+# choice randomly density number of points
 choicePoints = []
 for point in range(density):
     choicePoints.append(result[randrange(0,len(result))]) 
@@ -90,11 +90,10 @@ with open('assets/bubble'+str(density)+'x'+str(targetSize)+'.csv', 'w') as out:
     for row in choicePoints:
         out.write(str(int(row[0]))+","+str(int(row[1]))+","+str(r//2)+"\n")
 
-# TODO: gen selected points
+# choice randomly points to selected
 selectedPoints = []
 for i in range(density//5):
     selectedPoints.append(randrange(0,len(choicePoints)))
-
 
 with open('assets/selected'+str(density)+'x'+str(targetSize)+'.csv', 'w') as out:
     for row in selectedPoints:
