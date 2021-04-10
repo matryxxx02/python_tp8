@@ -14,6 +14,7 @@ class NormalWidget(QWidget):
             reader = csv.reader(file)
             for row in reader:
                 self.targets.append(Target(int(row[0]), int(row[1]), int(row[2])))
+                
         self.cursor = NormalCursor(self.targets)
 
     def paintEvent(self, event):
