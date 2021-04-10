@@ -2,10 +2,9 @@ import csv
 import math
 import sys
 
-print( sys.argv)
 if (len(sys.argv)<3):
-    print("density and target Size must be provided")
-    exit
+    print("density and target Size must be provided !")
+    quit()
 
 density = int(sys.argv[1])
 targetSize = int(sys.argv[2])
@@ -85,11 +84,18 @@ while active_list:
 
 choicePoints = []
 for point in range(density):
-    print(result[randrange(0,len(result))])
     choicePoints.append(result[randrange(0,len(result))]) 
 
-print(choicePoints)
-
-with open('test.csv', 'w') as out:
+with open('assets/bubble'+str(density)+'x'+str(targetSize)+'.csv', 'w') as out:
     for row in choicePoints:
         out.write(str(int(row[0]))+","+str(int(row[1]))+","+str(r//2)+"\n")
+
+# TODO: gen selected points
+selectedPoints = []
+for i in range(density//5):
+    selectedPoints.append(randrange(0,len(choicePoints)))
+
+
+with open('assets/selected'+str(density)+'x'+str(targetSize)+'.csv', 'w') as out:
+    for row in selectedPoints:
+        out.write(str(row)+"\n")
