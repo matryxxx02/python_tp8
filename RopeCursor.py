@@ -4,8 +4,8 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
 class RopeCursor(BubbleCursor):
-    def __init__(self, targets):
-        BubbleCursor.__init__(self, targets)
+    def __init__(self, targets, currentUserNb, method, density, currentTargetSize):
+        BubbleCursor.__init__(self, targets, currentUserNb, method, density, currentTargetSize)
         
     def paint(self, painter):
         if(self.closest != None):

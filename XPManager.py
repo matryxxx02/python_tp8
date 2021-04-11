@@ -8,17 +8,18 @@ class XPManager():
     def __init__(self, userNb,	method, density, targetSize, repetitions):
         self.targetSize = []
         self.density = []
+        self.currentUserNb = userNb
         self.method = method
         self.currentDensity = density
         self.currentTargetSize = targetSize
         self.currentRepetitions = repetitions
 
     def choiceCursor(self):
-        fileBubble = "bubble"+self.currentDensity+"x"+self.currentTargetSize+".csv"
-        fileSelectedTarget = "selected"+self.currentDensity+"x"+self.currentTargetSize+".csv"
+        fileBubble = "assets/bubble"+self.currentDensity+"x"+self.currentTargetSize+".csv"
+        fileSelectedTarget = "assets/selected"+self.currentDensity+"x"+self.currentTargetSize+".csv"
         if(self.method=="Highlight"):
-			return NormalWidget(fileBubble,fileSelectedTarget)
-		elif (self.method=="Rope") :
-			return BubbleWidget("Rope",fileBubble,fileSelectedTarget)
-		else :
-			return BubbleWidget("Bubble",fileBubble,fileSelectedTarget)
+            return NormalWidget(fileBubble,fileSelectedTarget, self.currentUserNb, self.method, self.currentDensity, self.currentTargetSize)
+        elif (self.method=="Rope") :
+            return BubbleWidget("Rope",fileBubble,fileSelectedTarget, self.currentUserNb, self.method, self.currentDensity, self.currentTargetSize)
+        else :
+            return BubbleWidget("Bubble",fileBubble,fileSelectedTarget, self.currentUserNb, self.method, self.currentDensity, self.currentTargetSize)

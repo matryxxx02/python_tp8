@@ -4,7 +4,7 @@ from PyQt5.QtCore import *
 from math import sqrt
 
 class NormalCursor(QWidget):
-    def __init__(self, targets):
+    def __init__(self, targets, currentUserNb, method, density, currentTargetSize):
         QWidget.__init__(self)
         self.targets = targets
 

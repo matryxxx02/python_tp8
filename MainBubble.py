@@ -5,6 +5,7 @@ from PyQt5.QtCore import *
 from BubbleWidget import *
 from NormalWidget import *
 from ExpSetup import *
+from XPManager import *
 
 def main(args):
 	app = QApplication(sys.argv)
@@ -19,19 +20,9 @@ class MainWindow(QMainWindow):
 		self.resize(1024, 800)
 		self.dialog = ExpSetup()
 		userNb,	method, density, targetSize, repetitions = self.dialog.launchSetup()
-		print(userNb,
-		method,
-		density,
-		targetSize,
-		repetitions)
 
-		if(method=="Highlight"):
-			self.widget = NormalWidget()
-		elif (method=="Rope") :
-			self.widget = BubbleWidget("Rope")
-		else :
-			self.widget = BubbleWidget("Bubble")
-		self.setCentralWidget(self.widget)
+		manager = XPManager(userNb, method, density, targetSize, repetitions)
+		self.setCentralWidget(manager.choiceCursor())
 
 if __name__ == "__main__":
 	main(sys.argv)

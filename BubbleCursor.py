@@ -4,9 +4,10 @@ from PyQt5.QtCore import *
 from math import sqrt
 import random
 import time 
+import datetime
 
 class BubbleCursor(QWidget):
-    def __init__(self, targets):
+    def __init__(self, targets, currentUserNb, method, density, currentTargetSize):
         QWidget.__init__(self)
         self.defaultColor = QColor(134, 245, 95)
         self.x = 0
@@ -14,9 +15,13 @@ class BubbleCursor(QWidget):
         self.size = 10
         self.targets = targets
         self.closest = None
+        self.currentUserNb = currentUserNb
+        self.method = method
+        self.density = density
+        self.currentTargetSize = currentTargetSize
         self.selected = None #self.randomSelector()
         # self.selected.toSelect = True
-        self.timer = time.time()
+        # self.timer = time.time()
 
     def paint(self, painter):
         painter.setPen(QPen(self.defaultColor, 1))
@@ -26,16 +31,20 @@ class BubbleCursor(QWidget):
         self.x = x
         self.y = y
         closest = self.targets[0]
-        if (self.closest != None):
+        if(self.closest!= None):
             self.closest.toSelect = False
-
+        selectedTarget = " cible non selectionnée"
+        numTarget = None
         minDist = self.distance(x,y,closest)
-        for target in self.targets:
+        for idx, target in enumerate(self.targets):
             newDist = self.distance(x, y, target)
             if (newDist < minDist):
                 minDist = newDist
                 closest = target
-                # self.closest.toSelect = True
+                numTarget = idx
+        if(closest.toSelect == True):
+            selectedTarget = " cible selectionnée"
+        print(str(self.currentUserNb)+","+self.method+","+str(self.density)+","+str(self.currentTargetSize)+","+str(numTarget)+","+str(datetime.datetime.now())+","+selectedTarget)
         self.size = minDist
         self.closest = closest
         self.closest.toSelect = True
