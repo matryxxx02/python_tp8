@@ -5,6 +5,7 @@ from math import sqrt
 import random
 import time 
 import datetime
+from csv import writer
 
 class BubbleCursor(QWidget):
     def __init__(self, targets, currentUserNb, method, density, currentTargetSize):
@@ -33,7 +34,7 @@ class BubbleCursor(QWidget):
         closest = self.targets[0]
         if(self.closest!= None):
             self.closest.toSelect = False
-        selectedTarget = " cible non selectionnée"
+        selectedTarget = "cible non selectionne"
         numTarget = None
         minDist = self.distance(x,y,closest)
         for idx, target in enumerate(self.targets):
@@ -43,8 +44,12 @@ class BubbleCursor(QWidget):
                 closest = target
                 numTarget = idx
         if(closest.toSelect == True):
-            selectedTarget = " cible selectionnée"
-        print(str(self.currentUserNb)+","+self.method+","+str(self.density)+","+str(self.currentTargetSize)+","+str(numTarget)+","+str(datetime.datetime.now())+","+selectedTarget)
+            selectedTarget = "cible selectionnee"
+        if self.closest != None and not (closest.x == self.closest.x and closest.y == self.closest.y):
+            result = str(self.currentUserNb)+","+self.method+","+str(self.density)+","+str(self.currentTargetSize)+","+str(numTarget)+","+str(datetime.datetime.now())+","+selectedTarget
+            self.writeResultInCSV(result)
+            print(result)
+            
         self.size = minDist
         self.closest = closest
         self.closest.toSelect = True
@@ -66,4 +71,9 @@ class BubbleCursor(QWidget):
     def distance(self, cursorx, cursory, target):
         x = (target.x - cursorx) ** 2
         y = (target.y - cursory) ** 2
-        return sqrt(x+y) - target.size/2
+        return sqrt(x + y) - target.size / 2
+        
+    def writeResultInCSV(self, result):
+        with open('result.csv', 'a') as file:
+            file.write(result+"\n")
+            file.close()

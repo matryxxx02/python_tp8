@@ -88,7 +88,8 @@ for point in range(density):
 
 with open('assets/bubble'+str(density)+'x'+str(targetSize)+'.csv', 'w') as out:
     for row in choicePoints:
-        out.write(str(int(row[0]))+","+str(int(row[1]))+","+str(r//2)+"\n")
+        out.write(str(int(row[0])) + "," + str(int(row[1])) + "," + str(r // 2) + "\n")
+        out.close()
 
 # choice randomly points to selected
 selectedPoints = []
@@ -97,4 +98,5 @@ for i in range(density//5):
 
 with open('assets/selected'+str(density)+'x'+str(targetSize)+'.csv', 'w') as out:
     for row in selectedPoints:
-        out.write(str(row)+"\n")
+        out.write(str(row) + "\n")
+        out.close()
